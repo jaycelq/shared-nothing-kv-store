@@ -3,7 +3,7 @@ CC := g++
 CXXFLAGS = -g -Wall -O2
 
 PROTO := transaction.proto
-SRC := transaction.cpp
+SRC := transaction.cpp dbcoordinator.cpp
 PROTO_BUF_SRC := transaction.pb.cc
 
 OBJ := $(SRC:.cpp=.o)
