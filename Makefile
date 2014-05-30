@@ -5,6 +5,7 @@ CXXFLAGS = -g -Wall -O2
 PROTO := transaction.proto
 SRC := transaction.cpp dbcoordinator.cpp
 PROTO_BUF_SRC := transaction.pb.cc
+PROTO_BUF_HEADER := transaction.pb.h
 
 OBJ := $(SRC:.cpp=.o)
 OBJ += $(PROTO_BUF_SRC:.cc=.o)
@@ -34,4 +35,4 @@ $(PROGS):%: %.o $(OBJ)
 
 .PHONY: clean
 clean:
-	rm -f *.o $(PROGS) $(PROTO_BUF_SRC) *~ .depend
+	rm -f *.o $(PROGS) $(PROTO_BUF_SRC) $(PROTO_BUF_HEADER) *~ .depend
