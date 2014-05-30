@@ -1,0 +1,26 @@
+package InMemDB;
+
+message TransReq {
+    message Op {
+        enum OpCode {
+            GET = 1;
+            PUT = 2;
+            GETRANGE = 3;
+        }
+        required OpCode code = 1;
+        required int32 key = 2;
+        optional int32 key2 = 3 [default = 0];
+        optional string value = 4 [default = ""];
+    }
+    repeated Op op = 1;
+}
+
+message TransRsp {
+    required bool status = 1 [default = false];
+    message Rsp {
+        required int32 key = 1;
+        required string value = 2;
+    }
+    repeated Rsp rsp = 2;
+}
+
