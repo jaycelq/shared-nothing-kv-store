@@ -13,6 +13,10 @@ using namespace std;
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/server_abyss.hpp>
 
+#include "common.hpp"
+#include "dbworker.hpp"
+#include "transaction.hpp"
+
 class ExcuteTransaction;
 
 class dbcoordinator {
@@ -22,11 +26,16 @@ private:
     xmlrpc_c::registry* dbRegistry;
 
     /*DB Worker*/
-    int worker_nums;
-    
+    int workerNums;
+    int maxKeyNums;
+    int keysPerWorker;
+    dbworker* workers;
+    pthread_t* worker_threads;
+    map<int, TransactionReq> mapTransaction(TransactionReq transreq);
 public:
     friend class ExcuteTransaction;
-    dbcoordinator() {}
+    dbcoordinator(int workerNums, int maxKeyNums);
+    void setupWorkers();
     void setupRPC(ExcuteTransaction* rpc_method);
     void runRPC() {dbServer->run();}
 };

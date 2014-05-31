@@ -18,9 +18,9 @@ main(int argc, char **) {
         TransactionReq transreq;
 
         transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 1);
-        transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 2, "a");
-        transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 1, 3);
-        transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 1, 3);
+        transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 150, "a");
+        transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 30, 120);
+        transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 10, 100);
         transcParam.addc(transreq.toString());
 
         dbClient.call(serverUrl, methodName, transcParam, &result);
