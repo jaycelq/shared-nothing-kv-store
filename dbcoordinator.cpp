@@ -2,8 +2,14 @@
 
 dbcoordinator::dbcoordinator(int workerNums, int maxKeyNums) : workerNums(workerNums), maxKeyNums(maxKeyNums), keysPerWorker(maxKeyNums/workerNums) 
 {
+    int lo = 0;
     workers = new dbworker[workerNums];
     worker_threads = new pthread_t[workerNums];
+    for(int i = 0; i < workerNums; i++) {
+        workers[i].p.ceiling = lo;
+        workers[i].p.floor = lo + keysPerWorker - 1;
+        lo += keysPerWorker;
+    }
 }
 
 void dbcoordinator::setupRPC(ExcuteTransaction* rpc_method)
@@ -70,26 +76,16 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
     
     map<int, TransactionReq> transmap = rpc_method.mapTransaction(transreq);
     map<int,TransactionReq>::iterator it;
+    
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
-        std::cout << "Transaction on site" <<it->first << ":\n";
-        for(int i = 0; i < it->second.size(); i++) {
-            const InMemDB::TransReq::Op &op = it->second.Operation(i);
-            switch(op.code()) {
-            case InMemDB::TransReq_Op_OpCode_GET: {
-                cout << "Opration " << i << " GET, Key " <<op.key()<<endl;
-                break;
-            }
-            case InMemDB::TransReq_Op_OpCode_PUT: {
-                cout << "Opration " << i << " PUT, Key " <<op.key() << " Value "<< op.value() <<endl;
-                break;
-            }
-            case InMemDB::TransReq_Op_OpCode_GETRANGE: {
-                cout << "Opration " << i << " GETRANGE, Key1 " <<op.key() << " Key2 "<< op.key2() <<endl;
-                break;
-            }
-            default: break;
-            }
-        }
+        pthread_mutex_lock(&((rpc_method.workers[it->first]).work_mutex));
+        std::cout << "Acquire mutex of worker " <<it->first << ".\n";
+        (rpc_method.workers[it->first]).trans_req = &it->second;
+    }
+
+    for (it=transmap.begin(); it!=transmap.end(); ++it) {
+        std::cout << "Wake up worker " <<it->first << ".\n";
+        pthread_cond_signal(&(rpc_method.workers[it->first]).work_cv);
     }
     
     TransactionRsp transrsp;
@@ -98,5 +94,11 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
     transrsp.addResponse(5,"fff");
 
     *retvalP = transrsp.toString();
+    sleep(20);
+    for (it=transmap.begin(); it!=transmap.end(); ++it) {
+        std::cout << "Release mutex of worker " <<it->first << ".\n";
+        pthread_mutex_unlock(&((rpc_method.workers[it->first]).work_mutex));
+        (rpc_method.workers[it->first]).trans_req = &it->second;
+    }
 }
 

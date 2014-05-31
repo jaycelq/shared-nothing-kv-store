@@ -1,22 +1,38 @@
+#ifndef _dbworker_hpp
+#define _dbworker_hpp
+
+#include <cassert>
+#include <stdexcept>
+#include <iostream>
+#include <unistd.h>
+#include <pthread.h>
+
+#include "common.hpp"
+#include "transaction.hpp"
+
+using namespace std;
+
 class dbcoordinator;
+class ExcuteTransaction;
 
 class dbworker {
 private:
+    partition p;
+    pthread_mutex_t buf_mutex;
+    pthread_mutex_t work_mutex;
+    pthread_cond_t work_cv;
+    TransactionReq* trans_req;
     /*B tree of the partitioned key value store*/
     //Btree partition;
 public:
     friend class dbcoordinator;
-    /*job priority queue*/
-    /*work mutex, coordinator must hold the mutex when worker is working for him*/
-    pthread_mutex_t work_mutex;
+    friend class ExcuteTransaction;
+    dbworker();
     /*work cv, coordinator must signal work cv to wake up the worker*/
-    pthread_cond_t work_cv;
     /*map that store the result of get and get_range for coordinator*/
     //map<string, xmlrpc_c::value> buf;
     /*bool that store the result of put*/
     //bool* result;
-    /*mutex that protect the map*/
-    pthread_mutex_t buf_mutex;
     /*condition variable to wake up worker or inform coordinator*/
     pthread_cond_t buf_cv;
     /*Key range the worker is responsible for*/
@@ -27,12 +43,7 @@ public:
     map<string, xmlrpc_c::value> get(Key key);
     map<string, xmlrpc_c::value> get_range(Key key1, Key key2);
     */
-    void test() {cout <<"hello worker" << endl;}
-    static void *worker_routine(void *args) {
-        dbworker* worker;
-        worker = (dbworker *)args;
-        worker->test();
-        sleep(5);
-        return NULL;
-    }
+    static void *worker_routine(void *args) ;
 };
+
+#endif

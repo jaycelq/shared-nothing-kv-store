@@ -1,3 +1,6 @@
+#ifndef _dbcoordinator_hpp
+#define _dbcoordinator_hpp
+
 #define WIN32_LEAN_AND_MEAN  /* required by xmlrpc-c/server_abyss.hpp */
 
 #include <cassert>
@@ -55,3 +58,5 @@ public:
     }
     void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value *   const  retvalP);
 };
+
+#endif

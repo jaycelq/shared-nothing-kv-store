@@ -1,3 +1,6 @@
+#ifndef _transaction_hpp
+#define _transaction_hpp
+
 #include <cstdlib>
 #include <string>
 #include <iostream>
@@ -39,3 +42,5 @@ public:
     void setStatus(bool status) {rsp.set_status(status);}
     const InMemDB::TransRsp::Rsp& Response(int i) {return rsp.rsp(i);}
 };
+
+#endif
