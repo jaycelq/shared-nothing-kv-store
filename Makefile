@@ -3,7 +3,7 @@ CC := g++
 CXXFLAGS = -g -Wall -O2
 
 PROTO := transaction.proto
-SRC := transaction.cpp dbcoordinator.cpp dbworker.cpp
+SRC := transaction.cpp dbcoordinator.cpp dbworker.cpp BPlusTree.cpp
 PROTO_BUF_SRC := transaction.pb.cc
 PROTO_BUF_HEADER := transaction.pb.h
 

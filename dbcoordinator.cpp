@@ -94,7 +94,7 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
     transrsp.addResponse(5,"fff");
 
     *retvalP = transrsp.toString();
-    sleep(20);
+
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
         std::cout << "Release mutex of worker " <<it->first << ".\n";
         pthread_mutex_unlock(&((rpc_method.workers[it->first]).work_mutex));

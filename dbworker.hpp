@@ -9,6 +9,7 @@
 
 #include "common.hpp"
 #include "transaction.hpp"
+#include "BPlusTree.hpp"
 
 using namespace std;
 
@@ -22,8 +23,8 @@ private:
     pthread_mutex_t work_mutex;
     pthread_cond_t work_cv;
     TransactionReq* trans_req;
-    /*B tree of the partitioned key value store*/
-    //Btree partition;
+    /*B+ tree of the partitioned key value store*/
+    BPlusTree partitionedDB;
 public:
     friend class dbcoordinator;
     friend class ExcuteTransaction;
