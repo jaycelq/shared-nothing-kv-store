@@ -18,6 +18,7 @@ main(int argc, char **) {
         TransactionReq transreq;
 
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 1);
+        // Test Case 1
         transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 150, "a");
         transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 10, "b");
 	transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 90, "c");
@@ -37,6 +38,28 @@ main(int argc, char **) {
             cout << "Key: " << ret.key() << ", value: " << ret.value() << endl;
         }
 
+        // Test Case 2
+/*        xmlrpc_c::value result2;
+       	xmlrpc_c::paramList transcParam2;
+        TransactionReq transreq2;
+
+        transreq2.addOperation(InMemDB::TransReq_Op_OpCode_GET, 1002);
+        transreq2.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 1);
+       	transreq2.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 10, 1856);
+       	transreq2.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 998);
+       	transreq2.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 1098);
+       	transreq2.addOperation(InMemDB::TransReq_Op_OpCode_GET, 7);
+       	transcParam2.addc(transreq2.toString());
+       
+       	dbClient.call(serverUrl, methodName, transcParam2, &result2);
+
+        TransactionRsp transrsp2 = TransactionRsp(result);
+
+        for (int i = 0; i < transrsp.size(); i++) {
+            const InMemDB::TransRsp::Rsp &ret = transrsp2.Response(i);
+            cout << "Key: " << ret.key() << ", value: " << ret.value() << endl;
+        }
+*/
     } catch (exception const& e) {
         cerr << "Client threw error: " << e.what() << endl;
     } catch (...) {
