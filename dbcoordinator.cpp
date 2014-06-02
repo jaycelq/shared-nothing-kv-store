@@ -87,12 +87,16 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
         std::cout << "Wake up worker " <<it->first << ".\n";
         pthread_cond_signal(&(rpc_method.workers[it->first]).work_cv);
     }
-    
-    TransactionRsp transrsp;
-    transrsp.addResponse(3, "ab");
-    transrsp.addResponse(4,"cde");
-    transrsp.addResponse(5,"fff");
 
+    TransactionRsp transrsp;
+    for(it=transmap.begin(); it!=transmap.end(); ++it) {
+        while(rpc_method.workers[it->first].isComplete == false) {usleep(10);}
+        rpc_method.workers[it->first].isComplete = false;
+        transrsp.mergeFrom(rpc_method.workers[it->first].trans_rsp);
+        std::cout << "get result from worker:" << it->first << endl;
+    }
+    
+    
     *retvalP = transrsp.toString();
 
     for (it=transmap.begin(); it!=transmap.end(); ++it) {

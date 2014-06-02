@@ -40,6 +40,7 @@ public:
     int size() {return rsp.rsp_size();}
     void clear() {rsp.Clear();}
     void setStatus(bool status) {rsp.set_status(status);}
+    void mergeFrom(TransactionRsp from);
     const InMemDB::TransRsp::Rsp& Response(int i) {return rsp.rsp(i);}
 };
 

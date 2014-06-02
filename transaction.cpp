@@ -93,3 +93,8 @@ xmlrpc_c::value_string TransactionRsp::toString()
     string mybase64(xmlrpc_c::base64FromBytes(data));
     return (xmlrpc_c::value_string(mybase64)) ;
 }
+
+void TransactionRsp::mergeFrom(TransactionRsp from)
+{
+    rsp.MergeFrom(from.rsp);
+}

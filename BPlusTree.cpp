@@ -217,6 +217,7 @@ map<int, string> BPlusTree::getrange(int key1, int key2)
     int i = 0;
     map<int, string> res;
     if(root == NULL) return res;
+    cout << "root is not null" << endl;
     while(n->isLeaf == false) {
         innerNode *inner = (innerNode*) n;
         int slot = inner->getLower(key1);
@@ -231,6 +232,7 @@ map<int, string> BPlusTree::getrange(int key1, int key2)
 
     i = slot;
     while(true) {
+	if(leaf == NULL) break;
         for(; i < leaf->keyNum && leaf->key[i] >= key1 && leaf->key[i] <= key2; i++) {
             res[leaf->key[i]] = leaf->value[i];
         }

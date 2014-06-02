@@ -25,6 +25,8 @@ private:
     TransactionReq* trans_req;
     /*B+ tree of the partitioned key value store*/
     BPlusTree partitionedDB;
+    bool isComplete;
+    TransactionRsp trans_rsp;
 public:
     friend class dbcoordinator;
     friend class ExcuteTransaction;
