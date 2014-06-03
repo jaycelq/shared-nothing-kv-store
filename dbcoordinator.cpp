@@ -79,12 +79,16 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
     
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
         pthread_mutex_lock(&((rpc_method.workers[it->first]).work_mutex));
+#ifdef DEBUG
         std::cout << "Acquire mutex of worker " <<it->first << ".\n";
+#endif
         (rpc_method.workers[it->first]).trans_req = &it->second;
     }
 
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
+#ifdef DEBUG
         std::cout << "Wake up worker " <<it->first << ".\n";
+#endif
         pthread_cond_signal(&(rpc_method.workers[it->first]).work_cv);
     }
 
@@ -93,14 +97,18 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
         while(rpc_method.workers[it->first].isComplete == false) {usleep(10);}
         rpc_method.workers[it->first].isComplete = false;
         transrsp.mergeFrom(rpc_method.workers[it->first].trans_rsp);
+#ifdef DEBUG
         std::cout << "get result from worker:" << it->first << endl;
+#endif
     }
     
     
     *retvalP = transrsp.toString();
 
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
+#ifdef DEBUG
         std::cout << "Release mutex of worker " <<it->first << ".\n";
+#endif
         pthread_mutex_unlock(&((rpc_method.workers[it->first]).work_mutex));
         (rpc_method.workers[it->first]).trans_req = &it->second;
     }

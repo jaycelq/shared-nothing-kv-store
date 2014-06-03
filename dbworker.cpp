@@ -27,19 +27,23 @@ void* dbworker::worker_routine(void *args)
                 string value;
                 bool found = worker->partitionedDB.get(op.key(), value);
                 if(found) result[op.key()] = value;
+#ifdef DEBUG
                 cout << "Opration " << i << " GET, Key " <<op.key()<<endl;
+#endif
                 break;
             }
             case InMemDB::TransReq_Op_OpCode_PUT: {
                 worker->partitionedDB.put(op.key(), op.value());
+#ifdef DEBUG
                 cout << "Opration " << i << " PUT, Key " <<op.key() << " Value "<< op.value() <<endl;
+#endif
                 break;
             }
             case InMemDB::TransReq_Op_OpCode_GETRANGE: {
-                cout << "before get range" << endl;
+#ifdef DEBUG
                 cout << "Opration " << i << " GETRANGE, Key1 " <<op.key() << " Key2 "<< op.key2() <<endl;
+#endif
                 map<int, string> range = worker->partitionedDB.getrange(op.key(), op.key2());
-                cout << "after get range" << endl;
                 swap(result, range);
                 result.insert(range.begin(), range.end());
                 
