@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "../transaction.hpp"
 
 class DBOperationTestCaseGenerator
 {
