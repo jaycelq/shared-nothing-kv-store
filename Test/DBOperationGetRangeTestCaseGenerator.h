@@ -15,6 +15,7 @@ class DBOperationGetRangeTestCaseGenerator : public DBOperationTestCaseGenerator
 public:
     DBOperationGetRangeTestCaseGenerator(int start, int end, std::string *s);
     virtual void generateOperationTestCase();
+    virtual void print();
 private:
     int m_start;
     int m_end;

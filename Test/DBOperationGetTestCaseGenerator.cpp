@@ -23,3 +23,8 @@ void DBOperationGetTestCaseGenerator::generateOperationTestCase()
     stream->append("</key>\n");
     stream->append("  </Operation>\n");
 }
+
+void DBOperationGetTestCaseGenerator::print()
+{
+     std::cout << "Operation: Get" << " Key: " << this->m_key << std::endl;
+}

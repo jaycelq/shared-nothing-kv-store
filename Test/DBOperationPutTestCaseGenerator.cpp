@@ -27,3 +27,8 @@ void DBOperationPutTestCaseGenerator::generateOperationTestCase()
     stream->append("</Value>\n");
     stream->append("  </Operation>\n");
 }
+
+void DBOperationPutTestCaseGenerator::print()
+{
+    std::cout << "Operation: Put" << " Key: " << this->m_key << " Value:" << this->m_value << std::endl;
+}

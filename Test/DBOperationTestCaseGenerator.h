@@ -16,6 +16,7 @@ class DBOperationTestCaseGenerator
 {
 public:
     virtual void generateOperationTestCase() = 0;
+    virtual void print() = 0;
     virtual ~DBOperationTestCaseGenerator(){};
 protected:
     std::string *stream;

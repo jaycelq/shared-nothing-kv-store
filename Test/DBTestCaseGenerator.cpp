@@ -42,14 +42,18 @@ void DBTestCaseGenerator::generateTestCase()
     
     int testCaseCount = rand() % DBTestCaseGeneratorTransactionModule;
     
-    std::cout << "Transaction is " << testCaseCount << std::endl;
+    //std::cout << "Transaction is " << testCaseCount << std::endl;
     
     this->stream->clear();
     
     for (int i = 0; i < testCaseCount; i++)
     {
+        std::cout << "<Transaction>\n";
         generateTransaction();
+        std::cout << "</Transaction>\n";
     }
+    
+    std::cout << std::endl;
     
     xml << *this->stream << std::endl;
 }
@@ -72,6 +76,8 @@ void DBTestCaseGenerator::generateTransaction()
                                                                                                                 m_partitionRange,
                                                                                                                 m_crossProbabiltiy,
                                                                                                                 stream);
+        generator->print();
+        
         generator->generateOperationTestCase();
         delete generator;
     }

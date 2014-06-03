@@ -27,3 +27,8 @@ void DBOperationGetRangeTestCaseGenerator::generateOperationTestCase()
     stream->append("</End>\n");
     stream->append("  </Operation>\n");
 }
+
+void DBOperationGetRangeTestCaseGenerator::print()
+{
+     std::cout << "Operation: GetRange" << " Start: " << this->m_start << " End:" << this->m_end << std::endl;
+}

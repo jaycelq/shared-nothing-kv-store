@@ -15,6 +15,7 @@ class DBOperationPutTestCaseGenerator : public DBOperationTestCaseGenerator
 public:
     DBOperationPutTestCaseGenerator(int key, std::string value, std::string *s);
     virtual void generateOperationTestCase();
+    virtual void print();
 private:
     int m_key;
     std::string m_value;
