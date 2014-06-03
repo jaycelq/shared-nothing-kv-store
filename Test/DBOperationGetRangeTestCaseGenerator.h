@@ -13,7 +13,7 @@
 class DBOperationGetRangeTestCaseGenerator : public DBOperationTestCaseGenerator
 {
 public:
-    DBOperationGetRangeTestCaseGenerator(int start, int end, std::string *s);
+    DBOperationGetRangeTestCaseGenerator(int start, int end, std::string *s, TransactionReq *req);
     virtual void generateOperationTestCase();
     virtual void print();
 private:

@@ -20,6 +20,7 @@ public:
     virtual ~DBOperationTestCaseGenerator(){};
 protected:
     std::string *stream;
+    TransactionReq *req;
 };
 
 #endif
