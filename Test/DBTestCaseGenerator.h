@@ -15,10 +15,12 @@
 class DBTestCaseGenerator
 {
 public:
-    DBTestCaseGenerator(int worker);
+    DBTestCaseGenerator(int worker, int rangeInPartion, int maxCrossProbability, std::string filename = "testcase.xml");
     ~DBTestCaseGenerator();
     
     void generateTestCase();
+    
+    static int seed;
     
 private:
     void generateTransaction();
@@ -27,6 +29,8 @@ private:
     std::ofstream xml;
     
     int m_worker;
+    int m_partitionRange;
+    int m_crossProbabiltiy;
 };
 
 

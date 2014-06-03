@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include <ctime>
+
 #include "DBTestCaseGenerator.h"
 #include "DBOperationTestCaseGenerator.h"
 #include "DBOperationGetTestCaseGenerator.h"
@@ -16,11 +16,16 @@
 #define DBTestCaseGeneratorTransactionModule 15
 #define DBTestCaseGeneratorOperationModule 20
 
-DBTestCaseGenerator::DBTestCaseGenerator(int worker)
+int DBTestCaseGenerator::seed = time(NULL);
+
+DBTestCaseGenerator::DBTestCaseGenerator(int worker, int rangeInPartion, int maxCrossProbability, std::string filename)
 {
     this->m_worker = worker;
+    this->m_partitionRange = rangeInPartion;
+    this->m_crossProbabiltiy = maxCrossProbability;
+    
     this->stream = new std::string();
-    xml.open("testcase.xml");
+    xml.open(filename);
 }
 
 DBTestCaseGenerator::~DBTestCaseGenerator()
@@ -32,7 +37,9 @@ DBTestCaseGenerator::~DBTestCaseGenerator()
 
 void DBTestCaseGenerator::generateTestCase()
 {
-    srand((unsigned)time(0));
+    srand(seed);
+    seed = rand();
+    
     int testCaseCount = rand() % DBTestCaseGeneratorTransactionModule;
     
     std::cout << "Transaction is " << testCaseCount << std::endl;
@@ -49,7 +56,9 @@ void DBTestCaseGenerator::generateTestCase()
 
 void DBTestCaseGenerator::generateTransaction()
 {
-    srand((unsigned)time(0));
+    srand(seed);
+    seed = rand();
+    
     int operationCount = rand() % DBTestCaseGeneratorOperationModule;
     std::cout << "Operation is " << operationCount << std::endl;
     
@@ -58,7 +67,11 @@ void DBTestCaseGenerator::generateTransaction()
     for (int i = 0; i < operationCount; i++)
     {
         DBOperationGeneratorType type = DBOperationGeneratorType(i % 3);
-        DBOperationTestCaseGenerator *generator = DBOperationGeneratorFactory::createOperationTestCaseGenerator(type, this->m_worker, this->stream);
+        DBOperationTestCaseGenerator *generator = DBOperationGeneratorFactory::createOperationTestCaseGenerator(type,
+                                                                                                                m_worker,
+                                                                                                                m_partitionRange,
+                                                                                                                m_crossProbabiltiy,
+                                                                                                                stream);
         generator->generateOperationTestCase();
         delete generator;
     }

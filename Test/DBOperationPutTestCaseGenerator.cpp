@@ -8,7 +8,7 @@
 
 #include "DBOperationPutTestCaseGenerator.h"
 
-DBOperationPutTestCaseGenerator::DBOperationPutTestCaseGenerator(int key, int value, std::string *s)
+DBOperationPutTestCaseGenerator::DBOperationPutTestCaseGenerator(int key, std::string value, std::string *s)
 {
     this->stream = s;
     this->m_key = key;
@@ -23,7 +23,7 @@ void DBOperationPutTestCaseGenerator::generateOperationTestCase()
     stream->append(std::to_string(this->m_key));
     stream->append("</Key>\n");
     stream->append("    <Value>");
-    stream->append(std::to_string(this->m_value));
-    stream->append("</Value>");
+    stream->append(this->m_value);
+    stream->append("</Value>\n");
     stream->append("  </Operation>\n");
 }

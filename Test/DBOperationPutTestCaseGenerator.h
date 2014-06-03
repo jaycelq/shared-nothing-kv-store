@@ -13,11 +13,11 @@
 class DBOperationPutTestCaseGenerator : public DBOperationTestCaseGenerator
 {
 public:
-    DBOperationPutTestCaseGenerator(int key, int value, std::string *s);
+    DBOperationPutTestCaseGenerator(int key, std::string value, std::string *s);
     virtual void generateOperationTestCase();
 private:
     int m_key;
-    int m_value;
+    std::string m_value;
 };
 
 #endif
