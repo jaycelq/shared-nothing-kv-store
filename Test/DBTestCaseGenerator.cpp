@@ -42,7 +42,7 @@ TransactionReq DBTestCaseGenerator::generateTestCase()
     
     TransactionReq req;
     generateTransaction(&req);
-    
+    xml << *this->stream << std::endl;	    
     return req;
     
 //    int testCaseCount = rand() % DBTestCaseGeneratorTransactionModule;
@@ -83,7 +83,8 @@ void DBTestCaseGenerator::generateTransaction(TransactionReq *req)
                                                                                                                 m_worker,
                                                                                                                 m_partitionRange,
                                                                                                                 m_crossProbabiltiy,
-                                                                                                                stream);
+                                                                                                                stream,
+														req);
         //generator->print();
         
         generator->generateOperationTestCase();

@@ -13,7 +13,7 @@ DBOperationPutTestCaseGenerator::DBOperationPutTestCaseGenerator(int key, std::s
     this->stream = s;
     this->m_key = key;
     this->m_value = value;
-    this->req = req
+    this->req = req;
 }
 
 void DBOperationPutTestCaseGenerator::generateOperationTestCase()
@@ -28,7 +28,7 @@ void DBOperationPutTestCaseGenerator::generateOperationTestCase()
     stream->append("</Value>\n");
     stream->append("  </Operation>\n");
     
-    this->req->addOperation(InMemDB::TransReq_Op_OpCpde_PUT, this->m_key, this->m_value);
+    this->req->addOperation(InMemDB::TransReq_Op_OpCode_PUT, this->m_key, this->m_value);
 }
 
 void DBOperationPutTestCaseGenerator::print()

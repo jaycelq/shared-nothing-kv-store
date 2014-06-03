@@ -24,7 +24,7 @@ void DBOperationGetTestCaseGenerator::generateOperationTestCase()
     stream->append("</key>\n");
     stream->append("  </Operation>\n");
     
-    this->req->addOperation(InMemDB::TransReq_Op_OpCpde_GET, this->m_key);
+    this->req->addOperation(InMemDB::TransReq_Op_OpCode_GET, this->m_key);
 }
 
 void DBOperationGetTestCaseGenerator::print()

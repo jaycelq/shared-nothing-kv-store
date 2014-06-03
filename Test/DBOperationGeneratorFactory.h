@@ -36,17 +36,17 @@ public:
         
         if (type == DBOperationGeneratorTypeGet)
         {
-            gc = new DBOperationGetTestCaseGenerator(generateRandomKey(worker, rangeInPartition), s);
+            gc = new DBOperationGetTestCaseGenerator(generateRandomKey(worker, rangeInPartition), s, req);
         }
         else if (type == DBOperationGeneratorTypePut)
         {
-            gc = new DBOperationPutTestCaseGenerator(generateRandomKey(worker, rangeInPartition), generateRandomValue(8), s);
+            gc = new DBOperationPutTestCaseGenerator(generateRandomKey(worker, rangeInPartition), generateRandomValue(8), s, req);
         }
         else
         {
             int start = generateRandomKey(worker, rangeInPartition);
             int end = generateRandomKeyAmongCross(start, rangeInPartition, generateRandomCross(maxCross), worker);
-            gc = new DBOperationGetRangeTestCaseGenerator(start, end, s);
+            gc = new DBOperationGetRangeTestCaseGenerator(start, end, s, req);
         }
         return gc;
     }

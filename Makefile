@@ -19,6 +19,7 @@ XMLRPC_LIBS = $(shell $(XMLRPC_C_CONFIG) c++2 abyss-server client --libs)
 PROTO_BUF_INCLUDES := `pkg-config --cflags protobuf`
 PROTO_BUF_LIBS := `pkg-config --libs protobuf`
 TESTDIRS := Test
+TESTLIBS := Test/test.a
 
 all: depend $(PROGS)
 .PHONY: all
@@ -33,7 +34,7 @@ depend: $(PROTO_BUF_SRC)
 -include .depend
 
 $(PROGS):%: %.o $(OBJ)
-	g++ -o $@ $^ $(XMLRPC_LIBS) $(PROTO_BUF_LIBS)
+	g++ -o $@ $^ $(TESTLIBS) $(XMLRPC_LIBS) $(PROTO_BUF_LIBS)
 
 .PHONY: clean
 clean:

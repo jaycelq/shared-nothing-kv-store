@@ -4,10 +4,14 @@ TEST_SRC := DBOperationGetRangeTestCaseGenerator.cpp
 TEST_SRC += DBOperationGetTestCaseGenerator.cpp 
 TEST_SRC += DBOperationPutTestCaseGenerator.cpp
 TEST_SRC += DBTestCaseGenerator.cpp
+LIB := test.a
 
 .PHONY: all 
 
-all: depend $(TEST_SRC:.cpp=.o)
+all: depend $(LIB)
+
+$(LIB):$(TEST_SRC:.cpp=.o)
+	ar rcs $@ $^
 
 depend:
 	$(CC) -MM $(TEST_SRC) > .depend
