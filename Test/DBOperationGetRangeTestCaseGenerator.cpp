@@ -8,11 +8,12 @@
 
 #include "DBOperationGetRangeTestCaseGenerator.h"
 
-DBOperationGetRangeTestCaseGenerator::DBOperationGetRangeTestCaseGenerator(int start, int end, std::string *s)
+DBOperationGetRangeTestCaseGenerator::DBOperationGetRangeTestCaseGenerator(int start, int end, std::string *s, TransactionReq *req)
 {
     this->m_start = start;
     this->m_end = end;
     this->stream = s;
+    this->req = req;
 }
 
 void DBOperationGetRangeTestCaseGenerator::generateOperationTestCase()
@@ -26,6 +27,8 @@ void DBOperationGetRangeTestCaseGenerator::generateOperationTestCase()
     stream->append(std::to_string(this->m_end));
     stream->append("</End>\n");
     stream->append("  </Operation>\n");
+    
+    this->req->addOperation(InMemDB::TransReq_Op_OpCpde_GETRANGE, this->m_start, this->m_end);
 }
 
 void DBOperationGetRangeTestCaseGenerator::print()

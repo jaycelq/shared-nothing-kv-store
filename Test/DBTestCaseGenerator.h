@@ -18,12 +18,12 @@ public:
     DBTestCaseGenerator(int worker, int rangeInPartion, int maxCrossProbability, std::string filename = "testcase.xml");
     ~DBTestCaseGenerator();
     
-    void generateTestCase();
+    TransactionReq generateTestCase();
     
     static int seed;
     
 private:
-    void generateTransaction();
+    void generateTransaction(TransactionReq *req);
     
     std::string *stream;
     std::ofstream xml;

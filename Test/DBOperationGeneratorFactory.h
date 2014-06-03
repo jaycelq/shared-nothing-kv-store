@@ -29,7 +29,8 @@ public:
                                                                           int worker,
                                                                           int rangeInPartition,
                                                                           int maxCross,
-                                                                          std::string *s)
+                                                                          std::string *s,
+                                                                          TransactionReq *req)
     {
         DBOperationTestCaseGenerator *gc = NULL;
         
