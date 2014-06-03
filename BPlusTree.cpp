@@ -119,6 +119,7 @@ bool BPlusTree::get(Node* node, int key, string & v)
 
     if(node->isLeaf) {
         int slot = node->getLower(key) - 1;
+        if(slot < 0) return false;
         if(((leafNode*)node)->key[slot] == key) {
             v = ((leafNode*)node)->value[slot];
             return true;
@@ -225,9 +226,11 @@ map<int, string> BPlusTree::getrange(int key1, int key2)
 
     leafNode *leaf = (leafNode *)n;
 
-    int slot = leaf->getLower(key1)-1;
-	
-    if(leaf->key[slot] != key1) slot++;
+    int slot = leaf->getLower(key1);
+    if(slot > 0) {
+        slot--;
+        if(leaf->key[slot] != key1) slot++;
+    }
 
     i = slot;
     while(true) {
@@ -241,5 +244,6 @@ map<int, string> BPlusTree::getrange(int key1, int key2)
         } 
         else break;
     }
+
     return res;
 }

@@ -18,16 +18,16 @@ main(int argc, char **) {
         xmlrpc_c::paramList transcParam;
         TransactionReq transreq;
 	
-	DBTestCaseGenerator* test = new DBTestCaseGenerator(4, 50, 199);
+	DBTestCaseGenerator* test = new DBTestCaseGenerator(4, 1, 199);
 	transreq = test->generateTestCase();
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 1);
         // Test Case 1
-        //transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 150, "a");
-        //transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 10, "b");
-	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 90, "c");
+        //transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 1, "a");
+        //transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 3, "b");
+	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 1, "c");
 	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 150);
 	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 90);
-	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 10, 130);
+	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 0, 3);
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 30, 120);
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 10, 100);
         transcParam.addc(transreq.toString());

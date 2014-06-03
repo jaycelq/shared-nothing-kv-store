@@ -21,15 +21,18 @@ PROTO_BUF_LIBS := `pkg-config --libs protobuf`
 TESTDIRS := Test
 TESTLIBS := Test/test.a
 
-all: depend $(PROGS)
+all: depend test $(PROGS)
 .PHONY: all
 
 $(PROTO_BUF_SRC): $(PROTO)
 	protoc --cpp_out=. $(PROTO)
-	$(MAKE) -C $(TESTDIRS)
+
 
 depend: $(PROTO_BUF_SRC) 
 	$(CC) -MM $(SRC) $(PROTO_BUF_SRC) $(PROGS_SRC) > .depend
+
+test:	
+	$(MAKE) -C $(TESTDIRS)
 
 -include .depend
 
