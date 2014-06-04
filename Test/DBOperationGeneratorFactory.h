@@ -54,24 +54,24 @@ public:
 private:
     static int generateRandomKey(int worker, int rangeInPartition)
     {
-        srand(DBTestCaseGenerator::seed);
-        DBTestCaseGenerator::seed = rand();
+        //srand(DBTestCaseGenerator::seed);
+        //DBTestCaseGenerator::seed = rand();
         
         return rand() % (worker * rangeInPartition);
     }
     
     static int generateRandomKey(int range)
     {
-        srand(DBTestCaseGenerator::seed);
-        DBTestCaseGenerator::seed = rand();
+        //srand(DBTestCaseGenerator::seed);
+        //DBTestCaseGenerator::seed = rand();
         
         return rand() % range;
     }
     
     static std::string generateRandomValue(int len)
     {
-        srand(DBTestCaseGenerator::seed);
-        DBTestCaseGenerator::seed = rand();
+        //srand(DBTestCaseGenerator::seed);
+        //DBTestCaseGenerator::seed = rand();
         
         std::string result = "";
         
@@ -89,8 +89,8 @@ private:
     
     static int generateRandomCross(int cross)
     {
-        srand(DBTestCaseGenerator::seed);
-        DBTestCaseGenerator::seed = rand();
+        //srand(DBTestCaseGenerator::seed);
+        //DBTestCaseGenerator::seed = rand();
         
         return rand() % cross + 1;
     }

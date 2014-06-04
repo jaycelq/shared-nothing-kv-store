@@ -36,7 +36,7 @@ test:
 
 -include .depend
 
-$(PROGS):%: %.o $(OBJ)
+$(PROGS):%: %.o $(OBJ) $(TESTLIBS)
 	g++ -o $@ $^ $(TESTLIBS) $(XMLRPC_LIBS) $(PROTO_BUF_LIBS)
 
 .PHONY: clean

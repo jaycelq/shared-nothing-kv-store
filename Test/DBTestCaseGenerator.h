@@ -21,7 +21,7 @@ public:
     
     TransactionReq generateTestCase();
     
-    static int seed;
+    //static int seed;
     
 private:
     void generateTransaction(TransactionReq *req);

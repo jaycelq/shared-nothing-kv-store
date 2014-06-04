@@ -16,7 +16,7 @@
 #define DBTestCaseGeneratorTransactionModule 15
 #define DBTestCaseGeneratorOperationModule 20
 
-int DBTestCaseGenerator::seed = time(NULL);
+//int DBTestCaseGenerator::seed = time(NULL);
 
 DBTestCaseGenerator::DBTestCaseGenerator(int worker, int rangeInPartion, int maxCrossProbability, std::string filename)
 {
@@ -26,6 +26,9 @@ DBTestCaseGenerator::DBTestCaseGenerator(int worker, int rangeInPartion, int max
     
     this->stream = new std::string();
     xml.open(filename);
+    struct timeval time; 
+    gettimeofday(&time,NULL);
+    srand((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 DBTestCaseGenerator::~DBTestCaseGenerator()
@@ -37,8 +40,8 @@ DBTestCaseGenerator::~DBTestCaseGenerator()
 
 TransactionReq DBTestCaseGenerator::generateTestCase()
 {
-    srand(seed);
-    seed = rand();
+    //    srand(seed);
+    //    seed = rand();
     
     TransactionReq req;
     generateTransaction(&req);
@@ -66,8 +69,8 @@ TransactionReq DBTestCaseGenerator::generateTestCase()
 
 void DBTestCaseGenerator::generateTransaction(TransactionReq *req)
 {
-    srand(seed);
-    seed = rand();
+    //srand(seed);
+    //seed = rand();
     
     int operationCount = rand() % DBTestCaseGeneratorOperationModule;
     //std::cout << "Operation is " << operationCount << std::endl;
