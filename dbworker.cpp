@@ -1,25 +1,29 @@
 #include "dbworker.hpp"
 #include <algorithm>
 
+//#define DEBUG
+
 dbworker::dbworker()
 {
     isComplete = false;
     pthread_mutex_init(&work_mutex, NULL);
     pthread_mutex_init(&buf_mutex, NULL);
     pthread_cond_init(&work_cv, NULL);
+    pthread_cond_init(&buf_cv, NULL);
 }
 
 void* dbworker::worker_routine(void *args)
 {
     dbworker* worker;
     worker = (dbworker *)args;
-    map<int, string> result;
-    map<int, string>::iterator it;
+
     cout <<"Worker thread start! "<< endl;
     pthread_mutex_lock(&(worker->buf_mutex));
     while(true) {
         pthread_cond_wait(&(worker->work_cv), &(worker->buf_mutex));
         worker->trans_rsp.clear();
+        map<int, string> result;
+        map<int, string>::iterator it;
         for(int i = 0; i < (worker->trans_req)->size(); i++) {
             const InMemDB::TransReq::Op &op = (worker->trans_req)->Operation(i);
             switch(op.code()) {
@@ -56,6 +60,7 @@ void* dbworker::worker_routine(void *args)
             worker->trans_rsp.addResponse(it->first, it->second);
         }
         worker->isComplete = true;
+        pthread_cond_signal(&(worker->buf_cv));
     }
     return NULL;
 }

@@ -1,25 +1,77 @@
 #include "transaction.hpp"
-#include "Test/DBTestCaseGenerator.h"
+#include "Test/dbTest.hpp"
+#include <stdlib.h>
+#include <stdio.h>
+#include <getopt.h>
+
+
+static void print_usage()
+{
+    printf("Usage: ./dbclient -n(--worker) worker_number -k(--key) key -c(--crossPartition) cross_partition -l(--transLenght) length -h(--header) header\n\
+                 -n or --worker to define worker number\n\
+                 -k or --key to define the keys number every worker is responsible\n\
+                 -c or --crossPartition to define the cross Partitions numbers of the transaction\n\
+                 -l or --transLenght to define the operation number every transaction includes\n\
+                 -h or --header to define the worker to access\n");
+}
 
 int
-main(int argc, char **) {
+main(int argc, char **argv) {
 
-    if (argc-1 > 0) {
-        cerr << "This program has no arguments" << endl;
-        exit(1);
+    const char *optstring="n:k:c:l:h:";
+    int worker_num = 0, key = 0, crossP = 0, transLength = 0, header = -1 ,c, index;
+    struct option opts[]={{"worker",required_argument,NULL,'n'},
+                          {"key",required_argument,NULL,'k'},
+                          {"crossPartition", required_argument, NULL, 'c'},
+                          {"transLength", required_argument, NULL, 'l'},
+                          {"header", required_argument, NULL, 'h'},
+                          {0, 0, 0, 0,}};
+    
+    while((c=getopt_long(argc,argv,optstring,opts,&index))!=-1)
+    {
+
+        switch(c)
+        {
+        case 'n'://-n or --worker to define worker number 
+            worker_num = atoi(optarg);
+#ifdef DEBUG
+            printf("worker number is %d \n", worker_num);
+#endif
+            break;
+        case 'k'://-k or --key to define max key range
+            key =atoi(optarg);
+#ifdef DEBUG
+            printf("key range is %d \n", key);
+#endif
+            break;
+        case 'c':
+            crossP = atoi(optarg);
+#ifdef DEBUG
+            printf("cross Partition is %d \n", crossP);
+#endif
+            break;
+        case 'l':
+            transLength = atoi(optarg);
+#ifdef DEBUG
+            printf("transaction length %d \n", transLength);
+#endif
+            break;
+        case 'h':
+            header = atoi(optarg);
+#ifdef DEBUG
+            printf("hit site header is %d \n", header);
+#endif
+            break;
+        case '?':
+            print_usage();
+            exit(0);
+        }
     }
 
     try {
         string const serverUrl("http://localhost:8080/RPC2");
         string const methodName("db.ExcuteTransaction");
 
-        xmlrpc_c::clientSimple dbClient;
-        xmlrpc_c::value result;
-        xmlrpc_c::paramList transcParam;
-        TransactionReq transreq;
-	
-	DBTestCaseGenerator* test = new DBTestCaseGenerator(4, 1, 199);
-	transreq = test->generateTestCase();
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GET, 1);
         // Test Case 1
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_PUT, 1, "a");
@@ -30,17 +82,34 @@ main(int argc, char **) {
 	//transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 0, 3);
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 30, 120);
         //transreq.addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, 10, 100);
-        transcParam.addc(transreq.toString());
+     
+	
+	dbTest* test = new dbTest(worker_num, key, crossP, transLength, header);
+	xmlrpc_c::clientSimple dbClient;
+        
+	for (int t = 0; t < 10000; t++) {
+            xmlrpc_c::value result;
+            xmlrpc_c::paramList transcParam;
+            TransactionReq transreq;
 
-        dbClient.call(serverUrl, methodName, transcParam, &result);
+            transreq = test->generateTrans();
+            transcParam.addc(transreq.toString());
 
-        TransactionRsp transrsp = TransactionRsp(result);
+            dbClient.call(serverUrl, methodName, transcParam, &result);
 
-        for (int i = 0; i < transrsp.size(); i++) {
-            const InMemDB::TransRsp::Rsp &ret = transrsp.Response(i);
-            cout << "Key: " << ret.key() << ", value: " << ret.value() << endl;
+            TransactionRsp transrsp = TransactionRsp(result);
+
+#ifdef DEBUG
+            for (int i = 0; i < transrsp.size(); i++) {
+                const InMemDB::TransRsp::Rsp &ret = transrsp.Response(i);
+                cout << "Key: " << ret.key() << ", value: " << ret.value() << endl;
+            }
+#endif
+            transreq.clear();
+            transrsp.clear();
         }
 
+        cout << "dbClient finished !\n";
         // Test Case 2
 /*        xmlrpc_c::value result2;
        	xmlrpc_c::paramList transcParam2;

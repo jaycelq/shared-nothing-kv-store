@@ -22,6 +22,7 @@ private:
     pthread_mutex_t buf_mutex;
     pthread_mutex_t work_mutex;
     pthread_cond_t work_cv;
+    pthread_cond_t buf_cv;
     TransactionReq* trans_req;
     /*B+ tree of the partitioned key value store*/
     BPlusTree partitionedDB;
@@ -37,7 +38,6 @@ public:
     /*bool that store the result of put*/
     //bool* result;
     /*condition variable to wake up worker or inform coordinator*/
-    pthread_cond_t buf_cv;
     /*Key range the worker is responsible for*/
     //Key lower_bound, upper_bound;
     /*

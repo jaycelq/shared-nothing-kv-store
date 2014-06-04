@@ -1,5 +1,7 @@
 #include "dbcoordinator.hpp"
 
+//#define DEBUG
+
 dbcoordinator::dbcoordinator(int workerNums, int maxKeyNums) : workerNums(workerNums), maxKeyNums(maxKeyNums), keysPerWorker(maxKeyNums/workerNums) 
 {
     int lo = 0;
@@ -76,13 +78,19 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
     
     map<int, TransactionReq> transmap = rpc_method.mapTransaction(transreq);
     map<int,TransactionReq>::iterator it;
-    
+
+#ifdef DEBUG
+    cout << "hit site num: " << transmap.size() << endl;
+#endif
+
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
         pthread_mutex_lock(&((rpc_method.workers[it->first]).work_mutex));
 #ifdef DEBUG
         std::cout << "Acquire mutex of worker " <<it->first << ".\n";
 #endif
+        pthread_mutex_lock(&(rpc_method.workers[it->first].buf_mutex));
         (rpc_method.workers[it->first]).trans_req = &it->second;
+        pthread_mutex_unlock(&(rpc_method.workers[it->first].buf_mutex));
     }
 
     for (it=transmap.begin(); it!=transmap.end(); ++it) {
@@ -94,12 +102,15 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
 
     TransactionRsp transrsp;
     for(it=transmap.begin(); it!=transmap.end(); ++it) {
-        while(rpc_method.workers[it->first].isComplete == false) {usleep(10);}
+        pthread_mutex_lock(&(rpc_method.workers[it->first].buf_mutex));
+        while(rpc_method.workers[it->first].isComplete == false) {pthread_cond_wait(&(rpc_method.workers[it->first].buf_cv),&(rpc_method.workers[it->first].buf_mutex));}
         rpc_method.workers[it->first].isComplete = false;
         transrsp.mergeFrom(rpc_method.workers[it->first].trans_rsp);
+	rpc_method.workers[it->first].trans_rsp.clear();
 #ifdef DEBUG
         std::cout << "get result from worker:" << it->first << endl;
 #endif
+        pthread_mutex_unlock(&(rpc_method.workers[it->first].buf_mutex));
     }
     
     
@@ -110,7 +121,7 @@ void ExcuteTransaction::execute(xmlrpc_c::paramList const& paramList,
         std::cout << "Release mutex of worker " <<it->first << ".\n";
 #endif
         pthread_mutex_unlock(&((rpc_method.workers[it->first]).work_mutex));
-        (rpc_method.workers[it->first]).trans_req = &it->second;
+        //(rpc_method.workers[it->first]).trans_req = &it->second;
     }
 }
 

@@ -26,9 +26,7 @@ void DBOperationGetRangeTestCaseGenerator::generateOperationTestCase()
     stream->append("    <End>");
     stream->append(std::to_string(this->m_end));
     stream->append("</End>\n");
-    stream->append("  </Operation>\n");
-    
-    this->req->addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, this->m_start, this->m_end);
+    stream->append("  </Operation>    this->req->addOperation(InMemDB::TransReq_Op_OpCode_GETRANGE, this->m_start, this->m_end);
 }
 
 void DBOperationGetRangeTestCaseGenerator::print()

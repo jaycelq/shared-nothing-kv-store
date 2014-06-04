@@ -10,7 +10,7 @@ using namespace std;
 class BPlusTree
 {
 private:
-    static const int minimumDegree = 2;
+    static const int minimumDegree = 1024;
     static const int minKeyNum = minimumDegree - 1;
     static const int maxKeyNum = 2*minimumDegree - 1;
     static const int minChildNum = minimumDegree;

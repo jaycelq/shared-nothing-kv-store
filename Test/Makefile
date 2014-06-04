@@ -1,9 +1,10 @@
 CC := g++
 CXXFLAGS = -g -Wall -O2 -std=c++0x
-TEST_SRC := DBOperationGetRangeTestCaseGenerator.cpp 
-TEST_SRC += DBOperationGetTestCaseGenerator.cpp 
-TEST_SRC += DBOperationPutTestCaseGenerator.cpp
-TEST_SRC += DBTestCaseGenerator.cpp
+TEST_SRC := dbTest.cpp
+#TEST_SRC := DBOperationGetRangeTestCaseGenerator.cpp 
+#TEST_SRC += DBOperationGetTestCaseGenerator.cpp 
+#TEST_SRC += DBOperationPutTestCaseGenerator.cpp
+#TEST_SRC += DBTestCaseGenerator.cpp
 LIB := test.a
 
 .PHONY: all 

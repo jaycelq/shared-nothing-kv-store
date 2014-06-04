@@ -36,7 +36,7 @@ public:
         
         if (type == DBOperationGeneratorTypeGet)
         {
-            gc = new DBOperationGetTestCaseGenerator(generateRandomKey(worker, rangeInPartition), s, req);
+            gc = new DBOperationGetTestCaseGenerator(generateRandomKey(head, rangeInPartition, maxCross), s, req);
         }
         else if (type == DBOperationGeneratorTypePut)
         {
@@ -52,12 +52,12 @@ public:
     }
     
 private:
-    static int generateRandomKey(int worker, int rangeInPartition)
+    static int generateRandomKey(int head, int rangeInPartition, int maxCross)
     {
         //srand(DBTestCaseGenerator::seed);
         //DBTestCaseGenerator::seed = rand();
         
-        return rand() % (worker * rangeInPartition);
+        return rand() % (maxCross * rangeInPartition) + head * rangeInPartition;
     }
     
     static int generateRandomKey(int range)
